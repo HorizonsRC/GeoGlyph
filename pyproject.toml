@@ -1,0 +1,9 @@
+[project]
+name = "geoglyph"
+version = "0.1.0"
+dependencies = [
+    "typer>=0.27.1",
+]
+
+[project.scripts]
+geoglyph = "geoglyph.cli:app"
