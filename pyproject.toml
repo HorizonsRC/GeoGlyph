@@ -1,9 +1,31 @@
 [project]
 name = "geoglyph"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
     "typer>=0.27.1",
 ]
 
 [project.scripts]
 geoglyph = "geoglyph.cli:app"
+
+
+[tool.bumpversion]
+current_version = "0.0.0"
+commit = true
+tag = true
+tag_name = "{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = "{current_version}"
+replace = "{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "src/geoglyph/__init__.py"
+search = "__version__ = \"{current_version}\""
+replace = "__version__ = \"{new_version}\""
+
+[[tool.bumpversion.files]]
+filename = "readme.rst"
+search = "{current_version}"
+replace = "{new_version}"

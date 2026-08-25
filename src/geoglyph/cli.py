@@ -2,10 +2,7 @@
 
 import typer
 
-
-def write_to_hilltop(input_file, output_path):
-    print(f"write from {input_file} to {output_path}.")
-
+from geoglyph.uploader import write_to_hilltop
 
 
 app = typer.Typer()
