@@ -1,6 +1,5 @@
-GeoGlyph
+GeoGlyph 0.0.0
 =====================
-
 
 A Command line utility for writing to Hilltop
 
