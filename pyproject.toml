@@ -1,13 +1,23 @@
 [project]
 name = "geoglyph"
-version = "0.0.0"
+version = "0.1.0"
+description = "Command line utility for writing to hilltop from xmls and dsns of xmls"
+authors = [
+    {name = "SIrvine1994",email = "sam.irvine@horizons.govt.nz"}
+]
+license = "GNU General Public License v3"
+requires-python = ">=3.14.1"
 dependencies = [
     "typer>=0.27.1",
 ]
 
-[project.scripts]
-geoglyph = "geoglyph.cli:app"
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
 
+dependencies = [
+    "typer>=0.27.1",
+]
 
 [tool.bumpversion]
 current_version = "0.0.0"
