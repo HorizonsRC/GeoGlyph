@@ -16,3 +16,4 @@
 5) Release (replace <token> with value found in password manager).::
 
     poetry config pypi-token.pypi <token>
+    poetry publish --build
