@@ -13,6 +13,6 @@
 
     poetry build
 
-5) Release (username "__token__", password is in password manager).::
+5) Release (replace <token> with value found in password manager).::
 
-    twine upload dist/*
+    poetry config pypi-token.pypi <token>
