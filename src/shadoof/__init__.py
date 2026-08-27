@@ -1,4 +1,4 @@
 """Top-level package for GeoGlyph."""
 
 __author__ = """Sam Irvine"""
-__version__ = "0.1.2"
+__version__ = "0.1.0"

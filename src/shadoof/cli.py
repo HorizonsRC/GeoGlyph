@@ -2,7 +2,7 @@
 
 import typer
 
-from geoglyph.uploader import write_to_hilltop
+from shadoof.uploader import write_to_hilltop
 
 
 app = typer.Typer()

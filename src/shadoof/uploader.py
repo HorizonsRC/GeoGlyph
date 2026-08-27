@@ -12,7 +12,7 @@ import re
 from pathlib import Path
 import os
 
-import geoglyph.auditor as audit
+import shadoof.auditor as audit
 
 
 def _data_date_converter(df_row, info):
