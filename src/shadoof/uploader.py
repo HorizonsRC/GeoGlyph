@@ -1,4 +1,5 @@
 """Write data to a Hilltop file."""
+
 from datetime import UTC, datetime
 
 import pandas as pd
@@ -13,6 +14,7 @@ from pathlib import Path
 import os
 
 import shadoof.auditor as audit
+import shadoof.xml_sanitiser
 
 
 def _data_date_converter(df_row, info):
@@ -138,9 +140,11 @@ class ToHilltop:
             self.dput.PutArray(self.vtTime, self.vtValues)
 
 
-def read_hilltop_xml(xml):
+def read_hilltop_xml(xml, raw_xml=False):
     with open(xml, "r") as file:
         xml_content = file.read()
+    if not raw_xml:
+        xml_content = shadoof.xml_sanitiser.sanitise_xml(xml_content)
     root = whurl.schemas.responses.GetDataResponse.from_xml(xml_content)
     outputs = []
     for meas in root.measurements:
@@ -156,7 +160,7 @@ def read_hilltop_xml(xml):
     return outputs
 
 
-def read_hilltop_dsn(dsn):
+def read_hilltop_dsn(dsn, raw_xml=False):
     """Parse dsn to turn it into write instructions."""
     with open(dsn) as file:
         dsn_text = file.read()
@@ -166,13 +170,13 @@ def read_hilltop_dsn(dsn):
     for path in source_file:
         print(path)
         if Path(path).suffix == ".dsn":
-            outputs += read_hilltop_dsn(path)
+            outputs += read_hilltop_dsn(path, raw_xml=raw_xml)
         else:
-            outputs.append(read_hilltop_xml(path))
+            outputs.append(read_hilltop_xml(path, raw_xml=raw_xml))
     return outputs
 
 
-def write_to_hilltop(input_file, destination):
+def write_to_hilltop(input_file, destination, raw_xml=False):
     """Write a data file to a given Hilltop file."""
 
     if os.path.splitext(destination)[1] != ".hts":
@@ -180,15 +184,19 @@ def write_to_hilltop(input_file, destination):
     outputs = None
     match os.path.splitext(input_file)[1]:
         case ".xml":
-            outputs = read_hilltop_xml(input_file)
+            outputs = read_hilltop_xml(input_file, raw_xml=raw_xml)
         case ".dsn":
-            outputs = read_hilltop_dsn(input_file)
+            outputs = read_hilltop_dsn(input_file, raw_xml=raw_xml)
         case _:
-            raise ValueError(f"Unrecognised input file type '{os.path.splitext(input_file)[1]}'. Full path is {input_file}.")
+            raise ValueError(
+                f"Unrecognised input file type '{os.path.splitext(input_file)[1]}'. Full path is {input_file}."
+            )
 
     hts_com = ToHilltop(destination)
     for o in outputs:
         print(o[1])
-        audit.write_access_row(audit.get_audit_destination(destination), source=input_file, **o[1])
+        audit.write_access_row(
+            audit.get_audit_destination(destination), source=input_file, **o[1]
+        )
         hts_com.putData(**o[0])
     hts_com.close()
