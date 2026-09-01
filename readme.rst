@@ -1,4 +1,4 @@
-Shadoof 0.1.0
+Shadoof 0.1.1
 =====================
 
 A Command line utility for writing to Hilltop
