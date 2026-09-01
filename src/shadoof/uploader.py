@@ -156,6 +156,7 @@ def read_hilltop_xml(xml, raw_xml=False):
             "data": meas.data.timeseries,
         }
         audit_dict = audit.get_audit_dict(meas)
+        audit_dict["source"] = xml
         outputs.append((meas_dict, audit_dict))
     return outputs
 
@@ -172,7 +173,7 @@ def read_hilltop_dsn(dsn, raw_xml=False):
         if Path(path).suffix == ".dsn":
             outputs += read_hilltop_dsn(path, raw_xml=raw_xml)
         else:
-            outputs.append(read_hilltop_xml(path, raw_xml=raw_xml))
+            outputs += read_hilltop_xml(path, raw_xml=raw_xml)
     return outputs
 
 
@@ -195,8 +196,6 @@ def write_to_hilltop(input_file, destination, raw_xml=False):
     hts_com = ToHilltop(destination)
     for o in outputs:
         print(o[1])
-        audit.write_access_row(
-            audit.get_audit_destination(destination), source=input_file, **o[1]
-        )
+        audit.write_access_row(audit.get_audit_destination(destination), **o[1])
         hts_com.putData(**o[0])
     hts_com.close()
